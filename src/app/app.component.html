@@ -1,0 +1,36 @@
+<h3>Week 11 Lab</h3>
+<div>
+  <table class="table">
+      <tr style="text-align: center">
+        <td>
+          <h4>{{pollObj.question}}</h4>
+        </td>
+      </tr>
+
+      <tbody  *ngFor="let item of pollObj.options" >
+        <tr>
+          <td>{{item.text}}</td>
+          <td><input type="radio" name="vote" value="{{item.value}}" [(ngModel)]=vote></td>
+        </tr>
+      </tbody>
+
+      <tr>
+        <td>
+          <button type="submit" class="btn btn-primary" (click)="clientVote()">Vote</button>
+        </td>
+      </tr>
+  </table>
+</div>
+
+<div class="chart">
+  <div style="display: block;">
+    <canvas baseChart 
+      [data]="pieChartData" 
+      [labels]="pieChartLabels" 
+      [chartType]="pieChartType"
+      [options]="pieChartOptions"
+      [plugins]="pieChartPlugins"
+      [legend]="pieChartLegend">
+    </canvas>
+  </div>
+</div>
