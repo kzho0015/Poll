@@ -19,23 +19,30 @@ var pollObj = {
 };
 
 io.on("connection", function(socket) {
-    io.sockets.emit('display', pollObj);
+  console.log("new connection made from client with ID="+socket.id);
+  io.sockets.emit('display', pollObj);
+
+
     socket.on("newVote", function(data){
       io.sockets.emit("vote", countVote(data.vote));
+      socket.broadcast.emit("msg", socket.id + "has just voted!");
     });
+    
+      
   });
 
 function countVote(vote){
-  let res = pollObj;
-  for(let num in res.options){
-    if(vote == res.options[num].value ){
-      res.options[num].count++
+  for(let i in pollObj.options){
+    if(vote == pollObj.options[i].value ){
+      pollObj.options[i].count++;
+      return pollObj;
     }
   }
-  return res;
 }
 
 let port = 8080;
 server.listen(port, () => {
   console.log("Listening on port " + port);
 });
+
+

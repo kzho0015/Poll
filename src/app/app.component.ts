@@ -1,21 +1,23 @@
 import { Component } from '@angular/core';
 import { ChartType, ChartOptions } from 'chart.js';
 import { SingleDataSet, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
+import { bindCallback } from 'rxjs';
 import * as io from "socket.io-client";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'], 
 })
 
-export class AppComponent {
+export class AppComponent{
   socket: SocketIOClient.Socket;
   pollObj = {
     question:"",
     options:[]
   };
   vote: number;
+
 
   public pieChartOptions: ChartOptions = {
     responsive: true,
@@ -25,7 +27,10 @@ export class AppComponent {
   public pieChartType: ChartType = 'pie';
   public pieChartLegend = true;
   public pieChartPlugins = [];
-
+  public pieChartColors = [{
+    backgroundColour: [
+    "rgb(255, 99, 132, 0.2)"]
+  }];
 
   constructor() {
     this.socket = io.connect();
@@ -34,11 +39,14 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    this.socket.on("msg", function(data){
+      alert(data)
+    });
+
     this.newClient();
     this.updateVote();
   }
 
-  //listen the new connetion 
   newClient(){
     this.socket.on("display", data=>{
       this.displayChart(data);
@@ -46,6 +54,7 @@ export class AppComponent {
       this.pollObj = data;
     });  
   }
+
 
   displayLabel(data){
     var arr = [];
@@ -72,5 +81,4 @@ export class AppComponent {
       this.displayChart(data);
     });
   }
-
 }
